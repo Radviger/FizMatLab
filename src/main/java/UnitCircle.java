@@ -2,6 +2,7 @@ import lib.Window;
 import lib.render.Texture;
 
 import static java.lang.Math.*;
+import static lib.math.RenderMaths.format;
 
 public class UnitCircle extends Window {
     private final Texture logo = Texture.load("logo.png");
@@ -45,13 +46,6 @@ public class UnitCircle extends Window {
         }
 
         canvas.drawTexture(logo, width - 64, height - 64, 64, 64);
-    }
-
-    private double format(double value) {
-        if (value != value) {
-            return value;
-        }
-        return Math.round((int)(value * 10000) / 10000.0 * 1000.0) / 1000.0;
     }
 
     public static void main(String[] args) {

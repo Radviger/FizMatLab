@@ -45,4 +45,16 @@ public class RenderMaths {
         return result * precision;
     }
 
+
+    public static double format(double value) {
+        return format(value, 3);
+    }
+
+    public static double format(double value, int zeroes) {
+        double mod = Math.pow(10, Math.max(0, zeroes));
+        if (value != value) {
+            return value;
+        }
+        return Math.round((int)(value * mod * 10) / 10.0) / mod;
+    }
 }

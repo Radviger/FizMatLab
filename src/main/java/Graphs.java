@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static java.lang.Math.*;
 import static lib.math.RenderMaths.ONE_MIN_EPS;
+import static lib.math.RenderMaths.format;
 
 public class Graphs extends Window {
     private final Map<Function, CachedFunction> cache = new HashMap<>();
@@ -190,13 +191,6 @@ public class Graphs extends Window {
     private void drawLabel(int slot, int color, String text) {
         int fh = canvas.font.fontHeight;
         canvas.drawText(color, 10, fh + slot * (fh + 5), text, true);
-    }
-
-    private double format(double value) {
-        if (value != value) {
-            return value;
-        }
-        return Math.round((int)(value * 10000) / 10000.0 * 1000.0) / 1000.0;
     }
 
     public static void main(String[] args) {
