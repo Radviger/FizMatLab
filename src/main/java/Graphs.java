@@ -81,7 +81,7 @@ public class Graphs extends Window {
         amplitude += dy;
     }
 
-    protected long factorial(int input) {
+    protected long factorial(long input) {
         long result = 1;
 
         for (int factor = 2; factor <= input; factor++) {
@@ -91,9 +91,9 @@ public class Graphs extends Window {
         return result;
     }
 
-    protected double sinSeries(double x, int n) {
+    protected double sinSeries(double x, long n) {
         double result = 0;
-        for (int i = 0; i < n; i++) {
+        for (long i = 0; i < n; i++) {
             result += ((i & 1) == 0 ? 1 : -1) * pow(x, 2 * i + 1) / factorial(2 * i + 1);
         }
         return result;
@@ -128,16 +128,16 @@ public class Graphs extends Window {
 
         int color = getRainbowColor(10.0);
 
-        drawFunction(0, color, 2, x -> arc(x, 4));
-        drawFunction(1, color, 2, x -> -arc(x, 4));
-        //drawFunction(0, 0xDD0000, 1.5, x -> sin(x) * amplitude * timer.frequency(0.5));
-        //drawFunction(1, 0x0000DD, 1.5, x -> sinSeries(x, precision) * amplitude * timer.frequency(0.5));
+        //drawFunction(0, color, 2, x -> arc(x, 4));
+        //drawFunction(1, color, 2, x -> -arc(x, 4));
+        drawFunction(0, 0xDD0000, 1.5, x -> sin(x) * amplitude * timer.frequency(0.5));
+        drawFunction(1, 0x0000DD, 1.5, x -> sinSeries(x, precision) * amplitude * timer.frequency(0.5));
 
         //canvas.fillFunction(color, grid, x -> pow(2, x));
 
         double endAngle = PI * (timer.frequency(0.5) + 1.0);
 
-        canvas.fillCircleSegment(0x77000000 | color, width / 2.0, height / 2.0, 150, 0, endAngle);
+        //canvas.fillCircleSegment(0x77000000 | color, width / 2.0, height / 2.0, 150, 0, endAngle);
 
         drawCursorLine(1);
     }

@@ -33,12 +33,12 @@ public class Canvas {
         fillCircleSegment(color, x, y, radius, 0, 2 * Math.PI);
     }
 
-    public void drawCircle(int color, double x, double y, double radius) {
-        drawCircleSegment(color, x, y, radius, 0, 2 * Math.PI);
+    public void drawCircle(int color, double x, double y, double radius, double thickness) {
+        drawCircleSegment(color, x, y, radius, 0, 2 * Math.PI, thickness);
     }
 
     public void fillCircleSegment(int color, double x, double y, double radius, double startAngle, double endAngle) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        disableTexture();
         tessellator.draw(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR, buffer -> {
             buffer.pos(x, y, 0).color(color).endVertex();
             for (double angle = startAngle; angle <= endAngle; angle += Math.PI / 3600) {
@@ -52,8 +52,9 @@ public class Canvas {
         });
     }
 
-    public void drawCircleSegment(int color, double x, double y, double radius, double startAngle, double endAngle) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+    public void drawCircleSegment(int color, double x, double y, double radius, double startAngle, double endAngle, double thickness) {
+        disableTexture();
+        GL11.glLineWidth((float) thickness);
         tessellator.draw(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_COLOR, buffer -> {
             for (double angle = startAngle; angle <= endAngle; angle += Math.PI / 3600) {
                 double dx = x + radius * Math.cos(angle);
@@ -64,10 +65,11 @@ public class Canvas {
                 buffer.pos(width / 2.0, height / 2.0, 0).color(color).endVertex();
             }
         });
+        GL11.glLineWidth(1);
     }
 
     public void drawTriangle(double x1, double y1, double x2, double y2, double x3, double y3, int color) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        disableTexture();
         tessellator.draw(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR, buffer -> {
             buffer.pos(x1, y1, 0).color(color).endVertex();
             buffer.pos(x2, y2, 0).color(color).endVertex();
@@ -76,7 +78,7 @@ public class Canvas {
     }
 
     public void drawGrid(int color, double size) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        disableTexture();
         tessellator.draw(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR, buffer -> {
             //Horizontal
             for (double y = 0; y < height; y += size) {
@@ -93,7 +95,7 @@ public class Canvas {
     }
 
     public void drawAxes(int color) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        disableTexture();
         tessellator.draw(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR, buffer -> {
             //Horizontal
             buffer.pos(0, height / 2.0, 0).color(color).endVertex();
@@ -108,7 +110,7 @@ public class Canvas {
     }
 
     public void drawLine(int color, double x1, double y1, double x2, double y2, double thickness) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        disableTexture();
         GL11.glLineWidth((float) thickness);
         tessellator.draw(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR, buffer -> {
             buffer.pos(x1, y1, 0).color(color).endVertex();
@@ -127,7 +129,7 @@ public class Canvas {
 
     public void drawTexture(Texture texture, double x, double y, double width, double height) {
         texture.bind();
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        enableTexture();
         tessellator.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buffer -> {
             buffer.pos(x, y, 0).tex(0, 0).color(255, 255, 255, 255).endVertex();
             buffer.pos(x + width, y, 0).tex(1, 0).color(255, 255, 255, 255).endVertex();
@@ -141,7 +143,7 @@ public class Canvas {
     }
 
     public void fillFunction(int color, double grid, Function function, double start, double end) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        disableTexture();
         tessellator.draw(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR, buffer -> {
             for (double x = start; x < end; x++) {
                 double arg = RenderMaths.clamp(2.0 * (x / width - 0.5) * ONE_MIN_EPS, -1.0, 1.0);
@@ -154,7 +156,7 @@ public class Canvas {
     }
 
     public void drawFunction(int graphColor, double grid, double thickness, Function function) {
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        disableTexture();
         GL11.glLineWidth((float) thickness);
         tessellator.draw(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION_COLOR, buffer -> {
             for (double x = 0; x < width; x++) {
@@ -165,5 +167,13 @@ public class Canvas {
             }
         });
         GL11.glLineWidth(1);
+    }
+
+    public void disableTexture() {
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+    }
+
+    public void enableTexture() {
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 }
