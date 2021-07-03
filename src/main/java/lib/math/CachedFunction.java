@@ -1,6 +1,6 @@
 package lib.math;
 
-public class CachedFunction {
+public class CachedFunction implements Function {
     private final Function function;
     private double lastStart, lastEnd, lastPrecision, lastArea;
 
@@ -16,5 +16,10 @@ public class CachedFunction {
             lastArea = RenderMaths.integrate(function, start, end, precision);
         }
         return lastArea;
+    }
+
+    @Override
+    public double apply(double x) {
+        return function.apply(x);
     }
 }

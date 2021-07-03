@@ -9,7 +9,7 @@ public class Pendulum extends Window {
     private final Texture logo = Texture.load("logo.png");
 
     public Pendulum() {
-        super(800, 800, "Pendulum", true, "CambriaMath", 36);
+        super(800, 800, "Pendulum", true, "Cambria Math", 46);
         setIcon("gravity.png");
     }
 

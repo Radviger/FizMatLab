@@ -15,7 +15,7 @@ public class FreeFall extends Window {
     private boolean negativeGravity;
 
     public FreeFall() {
-        super(800, 800, "Free Fall", true, "CambriaMath", 36);
+        super(800, 800, "Free Fall", true, "Cambria Math", 46);
         setIcon("gravity.png");
     }
 

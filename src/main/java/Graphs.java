@@ -12,6 +12,7 @@ import java.util.Map;
 import static java.lang.Math.*;
 import static lib.math.RenderMaths.ONE_MIN_EPS;
 import static lib.math.RenderMaths.format;
+import static lib.math.Series.*;
 
 public class Graphs extends Window {
     private final Map<Function, CachedFunction> cache = new HashMap<>();
@@ -24,7 +25,7 @@ public class Graphs extends Window {
     private final Texture logo = Texture.load("logo.png");
 
     public Graphs() {
-        super(800, 800, "Graphs", true, "CambriaMath", 36);
+        super(800, 800, "Graphs", true, "Cambria Math", 46);
         setIcon("graphs.png");
     }
 
@@ -82,43 +83,26 @@ public class Graphs extends Window {
         amplitude += dy;
     }
 
-    protected long factorial(long input) {
-        long result = 1;
-
-        for (int factor = 2; factor <= input; factor++) {
-            result *= factor;
-        }
-
-        return result;
+    protected double sinSeries(double x) {
+        return SIN.sum(x, 0, precision);
     }
 
-    protected double sinSeries(double x, long n) {
-        double result = 0;
-        for (long i = 0; i < n; i++) {
-            result += ((i & 1) == 0 ? 1 : -1) * pow(x, 2 * i + 1) / factorial(2 * i + 1);
-        }
-        return result;
+    protected double cosSeries(double x) {
+        return COS.sum(x, 0, precision);
     }
 
-    protected double cosSeries(double x, int n) {
-        double result = 0;
-        for (int i = 0; i < n; i++) {
-            result += ((i & 1) == 0 ? 1 : -1) * pow(x, 2 * i) / factorial(2 * i);
-        }
-        return result;
-    }
-
-    protected double expSeries(double x, int n) {
-        double result = 0;
-        for (int i = 0; i < n; i++) {
-            result += pow(x, i) / factorial(i);
-        }
-        return result;
+    protected double expSeries(double x) {
+        return EXP.sum(x, 0, precision);
     }
 
     private double arc(double x, double radius) {
         return sqrt(1 - x * x / (radius * radius)) * radius;
     }
+
+    CachedFunction ARC_P = new CachedFunction(x -> arc(x, 1));
+    CachedFunction ARC_N = new CachedFunction(x -> -arc(x, 1));
+    CachedFunction SINE = new CachedFunction(x -> sin(x) * amplitude * timer.frequency(0.5));
+    CachedFunction SINE_SERIES = new CachedFunction(x -> sinSeries(x) * amplitude * timer.frequency(0.5));
 
     @Override
     protected void onFrame(double elapsed) {
@@ -129,10 +113,10 @@ public class Graphs extends Window {
 
         int color = getRainbowColor(10.0);
 
-        //drawFunction(0, color, 2, x -> arc(x, 4));
-        //drawFunction(1, color, 2, x -> -arc(x, 4));
-        drawFunction(0, 0xDD0000, 1.5, x -> sin(x) * amplitude * timer.frequency(0.5));
-        drawFunction(1, 0x0000DD, 1.5, x -> sinSeries(x, precision) * amplitude * timer.frequency(0.5));
+        drawFunction(0, color, 2, ARC_P);
+        drawFunction(1, color, 2, ARC_N);
+//        drawFunction(0, 0xDD0000, 1.5, SINE);
+//        drawFunction(1, 0x0000DD, 1.5, SINE_SERIES);
 
         //canvas.fillFunction(color, grid, x -> pow(2, x));
 
@@ -144,7 +128,7 @@ public class Graphs extends Window {
     }
 
     private int getRainbowColor(double transitionTime) {
-        return Color.HSBtoRGB((float) (timer.seconds() % transitionTime / transitionTime), 1F, 1F);
+        return Color.HSBtoRGB((float) (timer.seconds() % transitionTime / transitionTime), 1F, 1F) & 0xFFFFFF;
     }
 
     private double toGridX(double x) {
@@ -163,7 +147,7 @@ public class Graphs extends Window {
         }
     }
 
-    private void drawFunction(int index, int color, double thickness, Function function) {
+    private void drawFunction(int index, int color, double thickness, CachedFunction function) {
         canvas.drawFunction(color, grid, 1.5, function);
         double shiftStep = grid * 4;
         double actualX = shift ? (int)(cursorX / shiftStep + 0.5) * shiftStep : cursorX;
@@ -181,8 +165,7 @@ public class Graphs extends Window {
             double end = Math.max(startX, realEnd);
             canvas.fillFunction(0x77000000 | color, grid, function, start, end);
 
-            CachedFunction cached = cache.computeIfAbsent(function, CachedFunction::new);
-            double sum = cached.integrate(toGridX(start), toGridX(end), 0.0001);
+            double sum = function.integrate(toGridX(start), toGridX(end), 0.0001);
 
             drawLabel(index + 5, color, "S(" + format(toGridX(start)) + ", " + format(toGridX(end)) + ") = " + format(sum));
         }

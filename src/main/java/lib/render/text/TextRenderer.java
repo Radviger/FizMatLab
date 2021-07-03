@@ -88,23 +88,17 @@ public class TextRenderer {
     }
 
     private int renderString(Canvas canvas, String text, double x, double y, int color, boolean shadow) {
-        if (text == null) {
-            return 0;
-        } else {
+        if (text != null) {
             if ((color & 0xfc000000) == 0) {
                 color |= 0xff000000;
             }
             if (shadow) {
                 color = (color & 0xfcfcfc) >> 2 | color & 0xff000000;
             }
-            float red = (float) (color >> 16 & 0xff) / 255F;
-            float green = (float) (color >> 8 & 0xff) / 255F;
-            float blue = (float) (color & 0xff) / 255F;
-            float alpha = (float) (color >> 24 & 255) / 255F;
-            GL11.glColor4f(red, green, blue, alpha);
-            this.posX = x + this.stringCache.renderString(canvas, text, x, y, color, shadow);
             this.posY = y;
-            return (int) this.posX;
+            return (int) (this.posX = x + this.stringCache.renderString(canvas, text, x, y, color, shadow));
+        } else {
+            return 0;
         }
     }
 

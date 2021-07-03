@@ -13,7 +13,7 @@ public class Molecules extends Window {
     private final Texture logo = Texture.load("logo.png");
 
     public Molecules() {
-        super(800, 800, "Molecules", true, "CambriaMath", 36);
+        super(800, 800, "Molecules", true, "Cambria Math", 46);
         setIcon("molecules.png");
     }
 
