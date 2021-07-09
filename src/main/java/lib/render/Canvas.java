@@ -41,9 +41,24 @@ public class Canvas {
         disableTexture();
         tessellator.draw(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR, buffer -> {
             buffer.pos(x, y, 0).color(color).endVertex();
-            for (double angle = startAngle; angle <= endAngle; angle += Math.PI / 3600) {
+            for (double angle = startAngle; angle <= endAngle; angle += Math.PI / 360) {
                 double dx = x + radius * Math.cos(angle);
                 double dy = y + radius * Math.sin(angle);
+                buffer.pos(dx, dy, 0).color(color).endVertex();
+            }
+            if (endAngle != 2 * Math.PI) {
+                buffer.pos(x, y, 0).color(color).endVertex();
+            }
+        });
+    }
+
+    public void fillOvalSegment(int color, double x, double y, double a, double b, double startAngle, double endAngle) {
+        disableTexture();
+        tessellator.draw(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR, buffer -> {
+            buffer.pos(x, y, 0).color(color).endVertex();
+            for (double angle = startAngle; angle <= endAngle; angle += Math.PI / 3600) {
+                double dx = x + a * Math.cos(angle);
+                double dy = y + b * Math.sin(angle);
                 buffer.pos(dx, dy, 0).color(color).endVertex();
             }
             if (endAngle != 2 * Math.PI) {
@@ -55,8 +70,10 @@ public class Canvas {
     public void drawCircleSegment(int color, double x, double y, double radius, double startAngle, double endAngle, double thickness) {
         disableTexture();
         GL11.glLineWidth((float) thickness);
+        double start = Math.min(startAngle, endAngle);
+        double end = Math.max(start, endAngle);
         tessellator.draw(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_COLOR, buffer -> {
-            for (double angle = startAngle; angle <= endAngle; angle += Math.PI / 3600) {
+            for (double angle = start; angle <= end; angle += Math.PI / 3600) {
                 double dx = x + radius * Math.cos(angle);
                 double dy = y + radius * Math.sin(angle);
                 buffer.pos(dx, dy, 0).color(color).endVertex();
@@ -128,13 +145,32 @@ public class Canvas {
     }
 
     public void drawTexture(Texture texture, double x, double y, double width, double height) {
+        drawTexture(texture, x, y, width, height, texture.width, texture.height);
+    }
+
+    public void drawTexture(Texture texture, double x, double y, double width, double height, double textureWidth, double textureHeight) {
         texture.bind();
         enableTexture();
         tessellator.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buffer -> {
             buffer.pos(x, y, 0).tex(0, 0).color(255, 255, 255, 255).endVertex();
-            buffer.pos(x + width, y, 0).tex(1, 0).color(255, 255, 255, 255).endVertex();
-            buffer.pos(x + width, y + height, 0).tex(1, 1).color(255, 255, 255, 255).endVertex();
-            buffer.pos(x, y + height, 0).tex(0, 1).color(255, 255, 255, 255).endVertex();
+            buffer.pos(x + width, y, 0).tex(width / textureWidth, 0).color(255, 255, 255, 255).endVertex();
+            buffer.pos(x + width, y + height, 0).tex(width / textureWidth, height / textureHeight).color(255, 255, 255, 255).endVertex();
+            buffer.pos(x, y + height, 0).tex(0, height / textureHeight).color(255, 255, 255, 255).endVertex();
+        });
+    }
+
+    public void drawSprite(Texture atlas, double x, double y, double width, double height, double startX, double startY, double spriteWidth, double spriteHeight) {
+        atlas.bind();
+        enableTexture();
+        double uMin = startX / atlas.width;
+        double uMax = (startX + spriteWidth) / atlas.width;
+        double vMin = startY / atlas.height;
+        double vMax = (startY + spriteHeight) / atlas.height;
+        tessellator.draw(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR, buffer -> {
+            buffer.pos(x, y, 0).tex(uMin, vMin).color(255, 255, 255, 255).endVertex();
+            buffer.pos(x + width, y, 0).tex(uMax, vMin).color(255, 255, 255, 255).endVertex();
+            buffer.pos(x + width, y + height, 0).tex(uMax, vMax).color(255, 255, 255, 255).endVertex();
+            buffer.pos(x, y + height, 0).tex(uMin, vMax).color(255, 255, 255, 255).endVertex();
         });
     }
 
