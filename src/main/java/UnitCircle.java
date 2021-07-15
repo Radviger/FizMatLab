@@ -45,7 +45,7 @@ public class UnitCircle extends Window {
             canvas.drawText(0, arcX + 10.0, arcY + 15.0, "(§4" + format(dx / length) + "§0, §1" + format(-dy / length) + "§0)", true);
         }
 
-        canvas.drawTexture(logo, width - 64, height - 64, 64, 64);
+        canvas.drawTexture(logo, width - 64, height - 64, 64, 64, 64, 64);
     }
 
     public static void main(String[] args) {

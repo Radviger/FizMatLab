@@ -91,7 +91,7 @@ public class FreeFall extends Window {
 
     @Override
     protected void onFrame(double elapsed) {
-        canvas.drawTexture(logo, width - 64, height - 64, 64, 64);
+        canvas.drawTexture(logo, width - 64, height - 64, 64, 64, 64, 64);
 
         for (Ball ball : balls) {
             ball.tick(elapsed);
