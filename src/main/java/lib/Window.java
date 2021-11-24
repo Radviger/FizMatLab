@@ -24,6 +24,10 @@ public class Window {
     protected final Canvas canvas;
     protected final Timer timer = new Timer();
 
+    public Window(int width, int height, String title, boolean vsync) {
+        this(width, height, title, vsync, "Cambria Math", 46);
+    }
+
     public Window(int width, int height, String title, boolean vsync, String font, int fontSize) {
         this.width = width;
         this.height = height;
