@@ -17,16 +17,6 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Window {
     private static final long NS_PER_SECOND = 1_000_000_000;
 
-    static {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            GLFW.glfwTerminate();
-            GLFWErrorCallback callback = GLFW.glfwSetErrorCallback(null);
-            if (callback != null) {
-                callback.free();
-            }
-        }, "GLFW shutdown hook"));
-    }
-
     protected final long handle;
     protected final int width, height;
     protected boolean cursorOver;
@@ -126,6 +116,7 @@ public class Window {
 
         Callbacks.glfwFreeCallbacks(handle);
         GLFW.glfwDestroyWindow(handle);
+        GLFW.glfwTerminate();
     }
 
     protected void clearColor() {
