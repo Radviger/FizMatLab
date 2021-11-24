@@ -94,6 +94,13 @@ public class Window {
         long lastFrameTime = System.nanoTime();
         GL11.glViewport(0, 0, width, height);
 
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glEnable(GL11.GL_POINT_SMOOTH);
+        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+        GL11.glHint(GL11.GL_POINT_SMOOTH_HINT, GL11.GL_NICEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
         while (!GLFW.glfwWindowShouldClose(handle)) {
             GLFW.glfwPollEvents();
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
