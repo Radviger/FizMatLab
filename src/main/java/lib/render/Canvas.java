@@ -136,6 +136,26 @@ public class Canvas {
         GL11.glLineWidth(1);
     }
 
+    public void drawVector(int color, double x1, double y1, double x2, double y2, double thickness, double tip) {
+        drawLine(color, x1, y1, x2, y2, thickness);
+        double nx = x2 - x1;
+        double ny = y2 - y1;
+        double len = Math.sqrt(nx * nx + ny * ny);
+        double angle = 45;
+        nx /= len;
+        ny /= len;
+        GL11.glPushMatrix();
+        GL11.glTranslated(x2, y2, 0);
+        GL11.glRotated(270.0 - angle, 0, 0, 1);
+        drawLine(color, nx * tip, ny * tip, 0, 0, thickness);
+        GL11.glPopMatrix();
+        GL11.glPushMatrix();
+        GL11.glTranslated(x2, y2, 0);
+        GL11.glRotated(90.0 + angle, 0, 0, 1);
+        drawLine(color, nx * tip, ny * tip, 0, 0, thickness);
+        GL11.glPopMatrix();
+    }
+
     public void drawText(int color, double x, double y, String text, boolean shadow) {
         font.drawString(this, text, x, y, color, shadow);
     }
