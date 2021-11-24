@@ -73,7 +73,7 @@ public class Canvas {
         double start = Math.min(startAngle, endAngle);
         double end = Math.max(start, endAngle);
         tessellator.draw(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_COLOR, buffer -> {
-            for (double angle = start; angle <= end; angle += Math.PI / 3600) {
+            for (double angle = start; angle <= end; angle += Math.PI / 361) {
                 double dx = x + radius * Math.cos(angle);
                 double dy = y + radius * Math.sin(angle);
                 buffer.pos(dx, dy, 0).color(color).endVertex();
