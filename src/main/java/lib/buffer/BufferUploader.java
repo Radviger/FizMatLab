@@ -22,11 +22,11 @@ public class BufferUploader {
             }
 
             GL11.glDrawArrays(buffer.getDrawMode(), 0, buffer.getVertexCount());
-            int i = 0;
+            int e = elements.size();
 
-            for (int e = elements.size(); i < e; ++i) {
+            for (int i = 0; i < e; ++i) {
                 VertexFormatElement element = elements.get(i);
-                element.getUsage().postDraw(format, i, size, data);
+                element.getUsage().postDraw(format, i);
             }
         }
 

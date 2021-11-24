@@ -41,7 +41,7 @@ public class Canvas {
         disableTexture();
         tessellator.draw(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR, buffer -> {
             buffer.pos(x, y, 0).color(color).endVertex();
-            for (double angle = startAngle; angle <= endAngle; angle += Math.PI / 360) {
+            for (double angle = startAngle; angle <= endAngle; angle += Math.PI / 361) {
                 double dx = x + radius * Math.cos(angle);
                 double dy = y + radius * Math.sin(angle);
                 buffer.pos(dx, dy, 0).color(color).endVertex();

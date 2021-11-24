@@ -136,28 +136,28 @@ public class VertexFormatElement {
 
         public void preDraw(VertexFormat format, int element, int stride, java.nio.ByteBuffer buffer) {
             VertexFormatElement attr = format.getElement(element);
-            int count = attr.getElementCount();
-            int constant = attr.getType().getGlConstant();
+            int size = attr.getElementCount();
+            int type = attr.getType().getGlConstant();
             buffer.position(format.getOffset(element));
             switch (this) {
                 case POSITION:
-                    GL11.glVertexPointer(count, constant, stride, buffer);
+                    GL11.glVertexPointer(size, type, stride, buffer);
                     GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
                     break;
                 case NORMAL:
-                    if (count != 3) {
+                    if (size != 3) {
                         throw new IllegalArgumentException("Normal attribute should have the size 3: " + attr);
                     }
-                    GL11.glNormalPointer(constant, stride, buffer);
-                    GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);;
+                    GL11.glNormalPointer(type, stride, buffer);
+                    GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
                     break;
                 case COLOR:
-                    GL11.glColorPointer(count, constant, stride, buffer);
+                    GL11.glColorPointer(size, type, stride, buffer);
                     GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
                     break;
                 case UV:
                     GL13.glActiveTexture(GL13.GL_TEXTURE0 + attr.getIndex());
-                    GL11.glTexCoordPointer(count, constant, stride, buffer);
+                    GL11.glTexCoordPointer(size, type, stride, buffer);
                     GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
                     GL13.glActiveTexture(GL13.GL_TEXTURE0);
                     break;
@@ -165,14 +165,14 @@ public class VertexFormatElement {
                     break;
                 case GENERIC:
                     GL20.glEnableVertexAttribArray(attr.getIndex());
-                    GL20.glVertexAttribPointer(attr.getIndex(), count, constant, false, stride, buffer);
+                    GL20.glVertexAttribPointer(attr.getIndex(), size, type, false, stride, buffer);
                     break;
                 default:
                     throw new RuntimeException("Unimplemented attribute upload: " + getDisplayName());
             }
         }
 
-        public void postDraw(VertexFormat format, int element, int stride, java.nio.ByteBuffer buffer) {
+        public void postDraw(VertexFormat format, int element) {
             VertexFormatElement attr = format.getElement(element);
             switch (this) {
                 case POSITION:
