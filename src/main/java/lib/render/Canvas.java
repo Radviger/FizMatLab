@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 import static lib.math.RenderMaths.ONE_MIN_EPS;
 
 public class Canvas {
-    protected final Tessellator tessellator;
+    public final Tessellator tessellator;
     public final int width, height;
     public final TextRenderer font;
 
