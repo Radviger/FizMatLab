@@ -84,7 +84,7 @@ public class Molecules extends Window {
     protected void onFrame(double elapsed) {
         canvas.drawGrid(0xCCCCCC, 40);
 
-        canvas.drawTexture(logo, width - 64, height - 64, 64, 64);
+        canvas.drawTexture(logo, width - 64, height - 64, 64, 64, 64, 64);
 
         for (Molecule molecule : molecules) {
             molecule.tick(canvas, elapsed, cursorOver, cursorX, cursorY, width, height);
