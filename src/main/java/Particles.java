@@ -1,4 +1,3 @@
-import com.sun.glass.events.KeyEvent;
 import lib.Window;
 import lib.render.Texture;
 import lib.vertex.DefaultVertexFormats;
@@ -23,7 +22,7 @@ public class Particles extends Window {
     @Override
     protected void onKeyButton(int key, int scancode, int action, int mods) {
         super.onKeyButton(key, scancode, action, mods);
-        if (key == GLFW.GLFW_KEY_TAB && action != KeyEvent.RELEASE) {
+        if (key == GLFW.GLFW_KEY_TAB && action != GLFW.GLFW_RELEASE) {
             for (int i = 0; i < 1000; i++) {
                 calculate();
             }
